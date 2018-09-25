@@ -1,0 +1,50 @@
+version: '2.3'
+
+services:
+  ansible-mgmt-node:
+    container_name: ansible-mgmt-node
+    hostname: ansible-mgmt-node
+    build:
+      context: .
+      dockerfile: Dockerfile-mgmt-node
+    entrypoint: "tail -f /dev/null"
+    networks:
+      ansible-macvlan:
+        ipv4_address: 192.168.0.180
+    volumes:
+      - ./config/:/etc/ansible/
+
+
+  ansible-node-1:
+    container_name: ansible-node-1
+    hostname: ansible-node-1
+    build:
+      context: .
+      dockerfile: Dockerfile-node
+    networks:
+      ansible-macvlan:
+        ipv4_address: 192.168.0.181
+
+  ansible-node-2:
+    container_name: ansible-node-2
+    hostname: ansible-node-2
+    build:
+      context: .
+      dockerfile: Dockerfile-node
+    networks:
+      ansible-macvlan:
+        ipv4_address: 192.168.0.182
+
+#https://www.furorteutonicus.eu/2013/08/04/enabling-host-guest-networking-with-kvm-macvlan-and-macvtap/
+networks:
+  ansible-macvlan:
+    driver: macvlan
+    driver_opts:
+      parent: bond0
+    ipam:
+      config:
+        - subnet: 192.168.0.0/24
+          gateway: 192.168.0.1
+          ip_range: 192.168.0.0/24
+#    external:
+#      name: fhemdocker_fhem-macvlan

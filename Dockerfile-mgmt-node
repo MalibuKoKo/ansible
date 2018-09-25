@@ -1,0 +1,18 @@
+FROM python:3.7.0-slim-stretch
+
+RUN apt-get update && \
+    apt-get install -y \
+    openssh-server
+
+RUN mkdir -p /root/.ssh && \
+    chmod 0700 /root/.ssh
+
+ADD id_rsa /root/.ssh/id_rsa
+ADD id_rsa.pub /root/.ssh/id_rsa.pub
+
+RUN chmod 600 /root/.ssh/id_rsa && \
+    chmod 600 /root/.ssh/id_rsa.pub
+
+RUN rm -f /usr/bin/python && ln -s /usr/local/bin/python /usr/bin/python
+
+RUN pip3 install ansible
