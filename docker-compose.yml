@@ -7,12 +7,20 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-mgmt-node
-    entrypoint: "tail -f /dev/null"
     networks:
       ansible-macvlan:
         ipv4_address: 192.168.0.180
     volumes:
       - ./config/:/etc/ansible/
+    depends_on:
+      - ansible-node-1
+      - ansible-node-2
+    entrypoint: |
+      /bin/bash -c "bash -s <<EOF
+        ssh-keyscan -H ansible-node-1 > ~/.ssh/known_hosts
+        ssh-keyscan -H ansible-node-2 >> ~/.ssh/known_hosts
+        tail -f /dev/null
+      EOF"
 
 
   ansible-node-1:

@@ -49,4 +49,3 @@
 [nodes_server]
 ansible-node-1
 ansible-node-2
-ansible_python_interpreter=/usr/local/bin/python
