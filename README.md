@@ -4,15 +4,7 @@ Execute :
 ```
 
 
-& go to the container thanks following command:
+& test ansible command:
 ```
-docker exec -it ansible-mgmt-node bash
-```
-
-```
-ssh root@ansible-node-1
-```
-
-```
-ansible -m ping nodes_server --one-line
+docker exec ansible-mgmt-node ansible -m ping nodes_server --one-line
 ```
